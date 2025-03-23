@@ -24,7 +24,7 @@ from datetime import datetime
 
 def get_occupancy(url):
     selector = "[data-visitors]"
-    log.debug(f"Get data frim {url}")
+    log.debug(f"Get data from {url}")
     content = dl.download_with_selenium(url, selector)
     soup = BeautifulSoup(content, "html.parser")
     span = soup.select_one(selector)
