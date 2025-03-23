@@ -1,2 +1,2 @@
-timestamp,url,training_area_m2,gym,occupancy
+timestamp_utc,url,training_area_m2,gym,occupancy
 2025-03-22T20:28:00Z,https://www.fitnesspark.ch/fitnessparks/zuerich-stadelhofen/ueber-den-park/,600,Fitnesspark Zürich Stadelhofen,2
