@@ -84,7 +84,7 @@ for row in rows:
     try:
         row["timestamp_utc"] = datetime.utcnow().isoformat()
         row["occupancy"] = get_occupancy(row["url"])
-        row["training_area_m2"] = int(row["training_area_m2"]) if row["training_area_m2"]
+        row["training_area_m2"] = int(row["training_area_m2"]) if row["training_area_m2"] else None
     except Exception:
       log.exception(f"There was an error in {row}")
       continue
