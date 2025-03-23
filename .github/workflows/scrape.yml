@@ -25,7 +25,7 @@ jobs:
         pip install -r requirements.txt
 
     - name: Fetch latest data
-      run: python scrape.py -f occupancy.csv
+      run: python scrape.py -f occupancy.csv --verbose
     
     - name: Commit and push if it changed
       run: |-
