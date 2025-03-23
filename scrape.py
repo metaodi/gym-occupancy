@@ -24,6 +24,7 @@ from datetime import datetime
 
 def get_occupancy(url):
     selector = "[data-visitors]"
+    log.debug(f"Get data frim {url}")
     content = dl.download_with_selenium(url, selector)
     soup = BeautifulSoup(content, "html.parser")
     span = soup.select_one(selector)
@@ -31,6 +32,7 @@ def get_occupancy(url):
         log.error(f"Selector {selector} not found in {url}")
         sys.exit(1)
     log.debug(f"span with '{span.text}'")
+  
     try:
         occupancy = int(span.text)
     except ValueError:
@@ -82,7 +84,10 @@ for row in rows:
     try:
         row["timestamp_utc"] = datetime.utcnow().isoformat()
         row["occupancy"] = get_occupancy(row["url"])
-        row["training_area_m2"] = int(row["training_area_m2"])
+        row["training_area_m2"] = int(row["training_area_m2"]) if row["training_area_m2"]
+    except Exception:
+      log.exception(f"There was an error in {row}")
+      continue
     finally:
         updated_rows.append(row)
 
