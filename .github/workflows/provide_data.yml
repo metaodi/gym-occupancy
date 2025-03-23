@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  update_data_artefact:
+  provide_data_artefact:
     runs-on: ubuntu-latest
     timeout-minutes: 45
 
