@@ -1,4 +1,4 @@
-name: Update data
+name: Provide data
 
 on:
   schedule:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  provide_data_artefact:
+  provide_data_artifact:
     runs-on: ubuntu-latest
     timeout-minutes: 45
 
@@ -23,7 +23,7 @@ jobs:
         
     - name: Prepare data from git
       run: |
-        git-history file occupancy.sqlite occupancy.csv --id gym
+        git-history file occupancy.sqlite occupancy.csv --id gym --csv
         python convert_sqlite_to-pkl.py --db occupancy.sqlite --output data.pkl
     
     - name: Upload artifact
