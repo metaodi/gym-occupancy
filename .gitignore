@@ -2,3 +2,5 @@
 pyenv
 __pycache__
 geckodriver.log
+occupancy.sqlite
+data.pkl
