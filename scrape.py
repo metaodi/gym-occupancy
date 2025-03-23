@@ -15,6 +15,7 @@ Options:
 
 import logging
 import sys
+import csv
 from bs4 import BeautifulSoup
 from docopt import docopt
 from lib import download as dl
@@ -41,7 +42,7 @@ def get_occupancy(url):
 def read_from_csv(csv_path):
     rows = []
     with open(csv_path) as f:
-        reader = DictReader(f)
+        reader = csv.DictReader(f)
         rows = [row for row in reader]
     return rows
 
