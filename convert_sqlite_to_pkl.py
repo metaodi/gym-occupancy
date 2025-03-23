@@ -20,12 +20,12 @@ import sqlite3
 import pandas as pd
 arguments = docopt(__doc__, version='convert_sqlite_to_pkl.py 1.0')
 
-db = arguments["--db-file"]
-pkl = arguments["--pkl-file"]
+db_file = arguments["--db"]
+pkl_file = arguments["--output"]
 
-dat = sqlite3.connect(db)
+dat = sqlite3.connect(db_file)
 query = dat.execute("SELECT * From item")
 cols = [column[0] for column in query.description]
 df = pd.DataFrame.from_records(data = query.fetchall(), columns = cols)
 
-df.to_pickle(pkl)
+df.to_pickle(pkl_file)
