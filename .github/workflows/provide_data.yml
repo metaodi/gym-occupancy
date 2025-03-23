@@ -24,7 +24,7 @@ jobs:
     - name: Prepare data from git
       run: |
         git-history file occupancy.sqlite occupancy.csv --id gym --csv
-        python convert_sqlite_to-pkl.py --db occupancy.sqlite --output data.pkl
+        python convert_sqlite_to_pkl.py --db occupancy.sqlite --output data.pkl
     
     - name: Upload artifact
       uses: actions/upload-artifact@v4
