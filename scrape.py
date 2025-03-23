@@ -82,6 +82,7 @@ for row in rows:
     try:
         row["timestamp_utc"] = datetime.utcnow().isoformat()
         row["occupancy"] = get_occupancy(row["url"])
+        row["training_area_m2"] = int(row["training_area_m2"])
     finally:
         updated_rows.append(row)
 
