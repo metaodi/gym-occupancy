@@ -29,3 +29,4 @@ output_file = arguments["--output"]
 # - create one big file with all entries
 # - remove duplicates from file
 # - add limit (e.g. --start-at <commit sha>) to the history
+# see https://github.com/simonw/git-history/blob/main/git_history/cli.py
