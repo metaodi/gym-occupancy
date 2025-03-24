@@ -4,4 +4,4 @@ docopts
 python-dotenv
 selenium
 pandas
-git-history
+GitPython
