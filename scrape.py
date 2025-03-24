@@ -18,8 +18,9 @@ import sys
 import csv
 from bs4 import BeautifulSoup
 from docopt import docopt
-from lib import download as dl
 from datetime import datetime
+from lib import download as dl
+from lib import utils
 
 
 def get_occupancy(url):
@@ -41,29 +42,6 @@ def get_occupancy(url):
     return occupancy
 
 
-def read_from_csv(csv_path):
-    rows = []
-    with open(csv_path) as f:
-        reader = csv.DictReader(f)
-        rows = [row for row in reader]
-    return rows
-
-
-def write_to_csv(csv_path, header, rows):
-    with open(csv_path, 'w', encoding="utf-8") as f:
-        writer = csv.DictWriter(
-            f,
-            header,
-            delimiter=',',
-            quotechar='"',
-            lineterminator='\n',
-            quoting=csv.QUOTE_NONNUMERIC
-        )
-        log.info("Start writing CSV")
-        writer.writeheader()
-        writer.writerows(rows)
-
-
 log = logging.getLogger(__name__)
 arguments = docopt(__doc__, version="Get text from website 1.0")
 
@@ -78,7 +56,7 @@ if arguments["--verbose"]:
     log.setLevel(logging.DEBUG)
 
 file_path = arguments["--file"]
-rows = read_from_csv(file_path)
+rows = utils.read_from_csv(file_path)
 updated_rows = []
 for row in rows:
     try:
@@ -98,4 +76,4 @@ header = [
     'gym',
     'occupancy',
 ]
-write_to_csv(file_path, header, updated_rows)
+utils.write_to_csv(file_path, header, updated_rows)

@@ -1,6 +1,7 @@
 .env
 pyenv
 __pycache__
+*.swp
+.ipynb_checkpoints/
 geckodriver.log
-occupancy.sqlite
-data.pkl
+occupancy_history.csv
