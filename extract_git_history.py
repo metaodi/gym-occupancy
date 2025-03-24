@@ -23,3 +23,9 @@ arguments = docopt(__doc__, version='extract_git_history.py 1.0')
 
 input_file = arguments["--file"]
 output_file = arguments["--output"]
+
+# TODO:
+# - iterate over commits that the given file changed
+# - create one big file with all entries
+# - remove duplicates from file
+# - add limit (e.g. --start-at <commit sha>) to the history
