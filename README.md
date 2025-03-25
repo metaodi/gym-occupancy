@@ -4,14 +4,8 @@ A small scraper to scrape the occupancy of gyms
 
 ## Usage
 
-Convert CSV to SQLite using the git history:
+Convert git history to one big CSV file:
 
 ```
-git-history file occupancy.sqlite occupancy.csv --id gym --csv
-```
-
-Conver the SQLite to a pickle file (pkl):
-
-```
-python convert_sqlite_to_pkl.py --db occupancy.sqlite --output data.pkl
+python extract_git_history.py -i occupancy.csv -o occupancy_history.csv --start-at be9808b76526d4b8646232e1d63148f10930576b
 ```
