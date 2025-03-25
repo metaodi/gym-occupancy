@@ -2,6 +2,8 @@ requests
 beautifulsoup4
 docopts
 python-dotenv
+ghapi
 selenium
 pandas
+streamlit
 GitPython
