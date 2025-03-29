@@ -59,6 +59,7 @@ def load_data():
     df = pd.read_csv("occupancy_history.csv", parse_dates=["timestamp_utc"])
     df["timestamp_utc"] = df.timestamp_utc.dt.tz_localize("UTC")
     df["timestamp_cet"] = df.timestamp_utc.dt.tz_convert("Europe/Zurich")
+    df["gym"] = df.gym.str.replace("Fitnesspark ", "")
     return df
 
 
@@ -74,30 +75,13 @@ gym_options = st.multiselect(
 )
 # select a gym
 st.query_params.gyms = gym_options
-    
 
-plt.style.use('fivethirtyeight')
-fig, ax = plt.subplots(figsize=(20,10))
+df["timestamp_cet"] = df["timestamp_cet"].dt.round("5min")
+df_pivot = df.pivot(index="timestamp_cet", columns="gym", values="occupancy")
+df_pivot = df_pivot.ffill()
+st.line_chart(df_pivot, y=gym_options)
 
-# TODO add all gyms
-for i, gym in enumerate(gym_options):
-    df_gym = df[df.gym == gym]
-    
-    df_gym.plot(kind='line', y='occupancy', x="timestamp_cet", label=gym, ax=ax)
-    #ax.legend().set_visible(False)
-
-ax.set_ylabel('Anzahl Personen')
-ax.set_xlabel('Datum')
-
-# Major ticks alle 5 Tage, ab dem 5.
-ax.xaxis.set_major_locator(mdates.HourLocator(byhour=range(6, 22, 6)))
-ax.xaxis.set_major_formatter(mdates.DateFormatter('%d.%m.%Y %H:%M'))
-plt.xticks(rotation=45, ha='right', rotation_mode='anchor')
-
-# Minor ticks off
-ax.xaxis.set_minor_locator(ticker.NullLocator())
-
-st.pyplot(fig)
+st.dataframe(df_pivot)
 
 
 # display content
