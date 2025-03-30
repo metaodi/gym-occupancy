@@ -10,9 +10,6 @@ import logging
 
 import requests
 import pandas as pd
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
-import matplotlib.ticker as ticker
 from ghapi.all import GhApi
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
@@ -28,7 +25,14 @@ logging.captureWarnings(True)
 log.setLevel(logging.DEBUG)
 
 
-st.set_page_config(page_title="Gym Occupancy", menu_items=None)
+st.set_page_config(
+    page_title="Gym Occupancy",
+    page_icon="🤸‍♀️",
+    layout="wide",
+    initial_sidebar_state="collapsed",
+    menu_items=None
+)
+
 st.title('Gym Occupancy')
 
 
@@ -76,8 +80,9 @@ gym_options = st.multiselect(
 # select a gym
 st.query_params.gyms = gym_options
 
-df["timestamp_cet"] = df["timestamp_cet"].dt.round("5min")
-df_pivot = df.pivot(index="timestamp_cet", columns="gym", values="occupancy")
+df["Datum"] = df["timestamp_cet"].dt.round("5min")
+df["Uhrzeit"] = df["Datum"].dt.strftime("%H:%M")
+df_pivot = df.pivot(index="Datum", columns="gym", values="occupancy")
 df_pivot = df_pivot.ffill()
 st.line_chart(df_pivot, y=gym_options)
 

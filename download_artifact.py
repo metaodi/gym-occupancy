@@ -7,7 +7,6 @@ import zipfile
 import io
 load_dotenv(find_dotenv())
 
-print(os.environ["GITHUB_TOKEN"])
 github_token = os.environ['GITHUB_TOKEN']
 owner = os.getenv('GITHUB_REPO_OWNER', 'metaodi')
 repo = os.getenv('GITHUB_REPO', 'gym-occupancy')
