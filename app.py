@@ -90,5 +90,6 @@ for gym in gym_options:
     st.header(f"Data table: {gym}")
     st.dataframe(df_gym)
 
+st.divider()
 st.markdown('&copy; 2025 Stefan Oderbolz | [Github Repository](https://github.com/metaodi/gym-occupancy)')
 

@@ -1,0 +1,11 @@
+fly.toml
+.git/
+__pycache__/
+.mypy_cache/
+.envrc
+.env
+.venv/
+.ipynb_checkpoints/
+geckodriver.log
+pyenv/
+occupany_history.csv
