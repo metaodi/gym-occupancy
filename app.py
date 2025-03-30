@@ -32,7 +32,7 @@ st.set_page_config(page_title="Gym Occupancy", menu_items=None)
 st.title('Gym Occupancy')
 
 
-@st.cache_data
+@st.cache_data(ttl=900)
 def load_data():
     github_token = os.getenv('GITHUB_TOKEN')
     if github_token:
