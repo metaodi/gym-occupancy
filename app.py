@@ -10,6 +10,7 @@ import logging
 
 import requests
 import pandas as pd
+from datetime import datetime, timedelta, date
 from ghapi.all import GhApi
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
@@ -61,7 +62,8 @@ def load_data():
             zip_ref.extractall('.')
 
     df = pd.read_csv("occupancy_history.csv", parse_dates=["timestamp_utc"])
-    df["timestamp_utc"] = df.timestamp_utc.dt.tz_localize("UTC")
+    df["timestamp"] = df["timestamp_utc"]
+    df["timestamp_utc"] = df.timestamp.dt.tz_localize("UTC")
     df["timestamp_cet"] = df.timestamp_utc.dt.tz_convert("Europe/Zurich")
     df["gym"] = df.gym.str.replace("Fitnesspark ", "")
     return df
@@ -80,21 +82,38 @@ gym_options = st.multiselect(
 # select a gym
 st.query_params.gyms = gym_options
 
+# select date range
 df["Datum"] = df["timestamp_cet"].dt.round("5min")
 df["Uhrzeit"] = df["Datum"].dt.strftime("%H:%M")
-df_pivot = df.pivot(index="Datum", columns="gym", values="occupancy")
-df_pivot = df_pivot.ffill()
-st.line_chart(df_pivot, y=gym_options)
 
-st.dataframe(df_pivot)
+min_date, max_date = df["timestamp"].min().date(), df["timestamp"].max().date()
+
+start_date_str = st.query_params.get('start_date') or (df["timestamp"].max().date() - timedelta(weeks=8)).strftime("%Y-%m-%d")
+end_date_str = st.query_params.get('end_date') or df["timestamp"].max().date().strftime("%Y-%m-%d")
+
+start_date = date.fromisoformat(start_date_str)
+end_date = date.fromisoformat(end_date_str)
+
+values = st.slider("Welche Daten möchtest du anschauen?", min_value=min_date, max_value=max_date, value=[start_date, end_date], step=timedelta(days=1), format="DD.MM.YYYY")
+start_date_str = values[0].strftime("%Y-%m-%d")
+end_date_str = values[1].strftime("%Y-%m-%d")
+
+st.query_params.start_date = start_date_str
+st.query_params.end_date = end_date_str
+
+df_subset = df[(df["Datum"] >= start_date_str) & (df["Datum"] <= end_date_str)]
+df_pivot = df_subset.pivot(index="Datum", columns="gym", values="occupancy")
+df_pivot = df_pivot.ffill()
+
+st.line_chart(df_pivot, y=gym_options)
 
 
 # display content
 for gym in gym_options:
-    df_gym = df[df.gym == gym]
+    df_gym = df[(df.gym == gym) & (df.Datum >= start_date_str) & (df.Datum <= end_date_str)]
     st.header(f"Data table: {gym}")
-    st.dataframe(df_gym)
+    st.dataframe(df_gym[["Datum", "Uhrzeit", "occupancy"]], hide_index=True, width=500)
 
 st.divider()
-st.markdown('&copy; 2025 Stefan Oderbolz | [Github Repository](https://github.com/metaodi/gym-occupancy)')
+st.markdown('&copy; 2026 Stefan Oderbolz | [Github Repository](https://github.com/metaodi/gym-occupancy)')
 
