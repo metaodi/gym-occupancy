@@ -86,17 +86,17 @@ st.query_params.gyms = gym_options
 df["Datum"] = df["timestamp_cet"].dt.round("5min")
 df["Uhrzeit"] = df["Datum"].dt.strftime("%H:%M")
 
-min_date, max_date = df["timestamp"].min().date(), df["timestamp"].max().date()
+min_date, max_date = df["timestamp"].min().date(), df["timestamp"].max().date() + timedelta(days=1)
 
 start_date_str = st.query_params.get('start_date') or (df["timestamp"].max().date() - timedelta(weeks=8)).strftime("%Y-%m-%d")
-end_date_str = st.query_params.get('end_date') or df["timestamp"].max().date().strftime("%Y-%m-%d")
+end_date_str = st.query_params.get('end_date') or (df["timestamp"].max().date() + timedelta(days=1)).strftime("%Y-%m-%d")
 
 start_date = date.fromisoformat(start_date_str)
 end_date = date.fromisoformat(end_date_str)
 
 values = st.slider("Welche Daten möchtest du anschauen?", min_value=min_date, max_value=max_date, value=[start_date, end_date], step=timedelta(days=1), format="DD.MM.YYYY")
-start_date_str = values[0].strftime("%Y-%m-%d")
-end_date_str = values[1].strftime("%Y-%m-%d")
+start_date_str = (values[0] + timedelta(days=1)).strftime("%Y-%m-%d")
+end_date_str = (values[1] + timedelta(days=1)).strftime("%Y-%m-%d")
 
 st.query_params.start_date = start_date_str
 st.query_params.end_date = end_date_str
