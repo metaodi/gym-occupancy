@@ -1,0 +1,22 @@
+[project]
+name = "gym-occupancy"
+version = "0.1.0"
+description = "A simple tool to scrape and visualize gym occupancy"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "beautifulsoup4>=4.14.3",
+    "docopts>=0.6.1",
+    "ghapi>=1.0.8",
+    "gitpython>=3.1.46",
+    "pandas>=2.0.3",
+    "python-dotenv>=1.0.1",
+    "requests>=2.32.4",
+    "selenium>=4.27.1",
+    "streamlit>=1.40.1",
+]
+
+[project.optional-dependencies]
+plot = [
+  "matplotlib>=3.7.5",
+]
