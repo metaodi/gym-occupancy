@@ -95,8 +95,8 @@ start_date = date.fromisoformat(start_date_str)
 end_date = date.fromisoformat(end_date_str)
 
 values = st.slider("Welche Daten möchtest du anschauen?", min_value=min_date, max_value=max_date, value=[start_date, end_date], step=timedelta(days=1), format="DD.MM.YYYY")
-start_date_str = (values[0] + timedelta(days=1)).strftime("%Y-%m-%d")
-end_date_str = (values[1] + timedelta(days=1)).strftime("%Y-%m-%d")
+start_date_str = (values[0]).strftime("%Y-%m-%d")
+end_date_str = (values[1]).strftime("%Y-%m-%d")
 
 st.query_params.start_date = start_date_str
 st.query_params.end_date = end_date_str
