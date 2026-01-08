@@ -7,5 +7,4 @@ __pycache__/
 .venv/
 .ipynb_checkpoints/
 geckodriver.log
-pyenv/
 occupany_history.csv

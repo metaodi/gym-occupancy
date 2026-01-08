@@ -3,7 +3,7 @@ name = "gym-occupancy"
 version = "0.1.0"
 description = "A simple tool to scrape and visualize gym occupancy"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 dependencies = [
     "beautifulsoup4>=4.14.3",
     "docopts>=0.6.1",
@@ -19,4 +19,7 @@ dependencies = [
 [project.optional-dependencies]
 plot = [
   "matplotlib>=3.7.5",
+  "ipykernel>=7.1.0",
+  "jupyter-client>=8.7.0",
+  "jupyter-core>=5.9.1",
 ]
