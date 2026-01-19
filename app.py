@@ -79,7 +79,7 @@ def load_data():
         'Saturday': 'Samstag',
         'Sunday': 'Sonntag'
     }
-    df['weekday'] = df['timestamp_cet'].dt.day_name("en_US").replace(mapping)
+    df['weekday'] = df['timestamp_cet'].dt.day_name().replace(mapping)
     df['date'] = df['timestamp_cet'].dt.date
     df["gym"] = df.gym.str.replace("Fitnesspark ", "")
     return df
