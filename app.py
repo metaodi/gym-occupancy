@@ -69,7 +69,7 @@ def load_data():
     df["timestamp_cet"] = df.timestamp_utc.dt.tz_convert("Europe/Zurich")
     df['hour'] = df['timestamp_cet'].dt.hour
     df['dow'] = df['timestamp_cet'].dt.dayofweek  # 0=Mo
-    df['weekday'] = df['timestamp_cet'].dt.day_name("de_CH")
+    df['weekday'] = df['timestamp_cet'].dt.day_name()
     df['date'] = df['timestamp_cet'].dt.date
     df["gym"] = df.gym.str.replace("Fitnesspark ", "")
     return df
