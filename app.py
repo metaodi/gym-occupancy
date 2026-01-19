@@ -13,6 +13,8 @@ import pandas as pd
 from datetime import datetime, timedelta, date
 from ghapi.all import GhApi
 from dotenv import load_dotenv, find_dotenv
+from lib import heatmap
+
 load_dotenv(find_dotenv())
 
 log = logging.getLogger(__name__)
@@ -65,6 +67,10 @@ def load_data():
     df["timestamp"] = df["timestamp_utc"]
     df["timestamp_utc"] = df.timestamp.dt.tz_localize("UTC")
     df["timestamp_cet"] = df.timestamp_utc.dt.tz_convert("Europe/Zurich")
+    df['hour'] = df['timestamp_cet'].dt.hour
+    df['dow'] = df['timestamp_cet'].dt.dayofweek  # 0=Mo
+    df['weekday'] = df['timestamp_cet'].dt.day_name("de_CH")
+    df['date'] = df['timestamp_cet'].dt.date
     df["gym"] = df.gym.str.replace("Fitnesspark ", "")
     return df
 
@@ -111,8 +117,17 @@ st.line_chart(df_pivot, y=gym_options)
 # display content
 for gym in gym_options:
     df_gym = df[(df.gym == gym) & (df.Datum >= start_date_str) & (df.Datum <= end_date_str)]
-    st.header(f"Data table: {gym}")
-    st.dataframe(df_gym[["Datum", "Uhrzeit", "occupancy"]], hide_index=True, width=500)
+
+    col1, col2 = st.columns(2)
+
+    # Heatmap
+    col1.header(f"Heatmap der Belegung: {gym}")
+    fig = heatmap.generate_heatmap(df_gym, gym)
+    col1.write(fig)
+
+    # data table
+    col2.header(f"Data table: {gym}")
+    col2.dataframe(df_gym[["Datum", "Uhrzeit", "occupancy"]], hide_index=True)
 
 st.divider()
 st.markdown('&copy; 2026 Stefan Oderbolz | [Github Repository](https://github.com/metaodi/gym-occupancy)')
