@@ -69,7 +69,17 @@ def load_data():
     df["timestamp_cet"] = df.timestamp_utc.dt.tz_convert("Europe/Zurich")
     df['hour'] = df['timestamp_cet'].dt.hour
     df['dow'] = df['timestamp_cet'].dt.dayofweek  # 0=Mo
-    df['weekday'] = df['timestamp_cet'].dt.day_name()
+
+    mapping = {
+        'Monday': 'Montag',
+        'Tuesday': 'Dienstag',
+        'Wednesday': 'Mittwoch',
+        'Thursday': 'Donnerstag',
+        'Friday': 'Freitag',
+        'Saturday': 'Samstag',
+        'Sunday': 'Sonntag'
+    }
+    df['weekday'] = df['timestamp_cet'].dt.day_name("en_US").replace(mapping)
     df['date'] = df['timestamp_cet'].dt.date
     df["gym"] = df.gym.str.replace("Fitnesspark ", "")
     return df
@@ -88,30 +98,31 @@ gym_options = st.multiselect(
 # select a gym
 st.query_params.gyms = gym_options
 
-# select date range
-df["Datum"] = df["timestamp_cet"].dt.round("5min")
-df["Uhrzeit"] = df["Datum"].dt.strftime("%H:%M")
+if len(gym_options) > 0:
+    # select date range
+    df["Datum"] = df["timestamp_cet"].dt.round("5min")
+    df["Uhrzeit"] = df["Datum"].dt.strftime("%H:%M")
 
-min_date, max_date = df["timestamp"].min().date(), df["timestamp"].max().date() + timedelta(days=1)
+    min_date, max_date = df["timestamp"].min().date(), df["timestamp"].max().date() + timedelta(days=1)
 
-start_date_str = st.query_params.get('start_date') or (df["timestamp"].max().date() - timedelta(weeks=8)).strftime("%Y-%m-%d")
-end_date_str = st.query_params.get('end_date') or (df["timestamp"].max().date() + timedelta(days=1)).strftime("%Y-%m-%d")
+    start_date_str = st.query_params.get('start_date') or (df["timestamp"].max().date() - timedelta(weeks=8)).strftime("%Y-%m-%d")
+    end_date_str = st.query_params.get('end_date') or (df["timestamp"].max().date() + timedelta(days=1)).strftime("%Y-%m-%d")
 
-start_date = date.fromisoformat(start_date_str)
-end_date = date.fromisoformat(end_date_str)
+    start_date = date.fromisoformat(start_date_str)
+    end_date = date.fromisoformat(end_date_str)
 
-values = st.slider("Welche Daten möchtest du anschauen?", min_value=min_date, max_value=max_date, value=[start_date, end_date], step=timedelta(days=1), format="DD.MM.YYYY")
-start_date_str = (values[0]).strftime("%Y-%m-%d")
-end_date_str = (values[1]).strftime("%Y-%m-%d")
+    values = st.slider("Welchen Datums-Bereich möchtest du anschauen?", min_value=min_date, max_value=max_date, value=[start_date, end_date], step=timedelta(days=1), format="DD.MM.YYYY")
+    start_date_str = (values[0]).strftime("%Y-%m-%d")
+    end_date_str = (values[1]).strftime("%Y-%m-%d")
 
-st.query_params.start_date = start_date_str
-st.query_params.end_date = end_date_str
+    st.query_params.start_date = start_date_str
+    st.query_params.end_date = end_date_str
 
-df_subset = df[(df["Datum"] >= start_date_str) & (df["Datum"] <= end_date_str)]
-df_pivot = df_subset.pivot(index="Datum", columns="gym", values="occupancy")
-df_pivot = df_pivot.ffill()
+    df_subset = df[(df["Datum"] >= start_date_str) & (df["Datum"] <= end_date_str)]
+    df_pivot = df_subset.pivot(index="Datum", columns="gym", values="occupancy")
+    df_pivot = df_pivot.ffill()
 
-st.line_chart(df_pivot, y=gym_options)
+    st.line_chart(df_pivot, y=gym_options)
 
 
 # display content
