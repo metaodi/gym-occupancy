@@ -101,12 +101,12 @@ st.query_params.gyms = gym_options
 
 if len(gym_options) > 0:
     # select date range
-    df["Datum"] = df["timestamp_cet"].dt.round("5min")
+    df["Datum"] = df["timestamp_cet"]
     df["Uhrzeit"] = df["Datum"].dt.strftime("%H:%M")
 
     min_date, max_date = df["timestamp"].min().date(), df["timestamp"].max().date() + timedelta(days=1)
 
-    start_date_str = st.query_params.get('start_date') or (df["timestamp"].max().date() - timedelta(weeks=8)).strftime("%Y-%m-%d")
+    start_date_str = st.query_params.get('start_date') or (df["timestamp"].max().date() - timedelta(weeks=5)).strftime("%Y-%m-%d")
     end_date_str = st.query_params.get('end_date') or (df["timestamp"].max().date() + timedelta(days=1)).strftime("%Y-%m-%d")
 
     start_date = date.fromisoformat(start_date_str)
@@ -148,9 +148,9 @@ for gym in gym_options:
     col1.write(fig)
 
     # data table
+    df_gym = df_gym.rename(columns={"occupancy": "Belegung"})
     col2.header(f"Data table: {gym}")
-    col2.dataframe(df_gym[["Datum", "Uhrzeit", "occupancy"]], hide_index=True)
+    col2.dataframe(df_gym[["Datum", "Uhrzeit", "Belegung"]], hide_index=True)
 
 st.divider()
 st.markdown('&copy; 2026 Stefan Oderbolz | [Github Repository](https://github.com/metaodi/gym-occupancy)')
-
