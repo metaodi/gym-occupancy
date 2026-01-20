@@ -14,18 +14,20 @@ jobs:
     - name: Check out this repo
       uses: actions/checkout@v3
 
-    - name: Set up Python 3.10
+    - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: "3.10"
+        python-version-file: ".python-version"
+    
+    - name: Install uv
+      uses: astral-sh/setup-uv@v6
 
-    - name: Install dependencies
+    - name: Install the dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        uv sync --locked --all-extras --dev
 
     - name: Fetch latest data
-      run: python scrape.py -f occupancy.csv --verbose
+      run: uv run python scrape.py -f occupancy.csv --verbose
     
     - name: Commit and push if it changed
       run: |-
