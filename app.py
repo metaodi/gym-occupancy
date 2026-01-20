@@ -2,6 +2,7 @@
 # coding: utf-8
 
 import streamlit as st
+import altair as alt
 
 import os
 import io
@@ -118,11 +119,21 @@ if len(gym_options) > 0:
     st.query_params.start_date = start_date_str
     st.query_params.end_date = end_date_str
 
-    df_subset = df[(df["Datum"] >= start_date_str) & (df["Datum"] <= end_date_str)]
-    df_pivot = df_subset.pivot(index="Datum", columns="gym", values="occupancy")
-    df_pivot = df_pivot.ffill()
+    df_subset = df[(df["Datum"] >= start_date_str) & (df["Datum"] <= end_date_str) & (df["gym"].isin(gym_options))]
+    df_subset = df_subset.rename(columns={"gym": "Fitnesscenter", "occupancy": "Belegung"})
 
-    st.line_chart(df_pivot, y=gym_options)
+    chart = (
+        alt.Chart(df_subset)
+        .mark_line(strokeWidth=3, point=True)
+        .encode(
+            x="Datum:T",
+            y="Belegung:Q",
+            color='Fitnesscenter:N',
+            tooltip=["Fitnesscenter", "Belegung", "Datum", "Uhrzeit"]
+        )
+    )
+
+    st.altair_chart(chart, key="occupancy_chart", on_select="ignore")
 
 
 # display content
