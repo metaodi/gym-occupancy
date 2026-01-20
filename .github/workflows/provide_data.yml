@@ -2,7 +2,7 @@ name: Provide data
 
 on:
   schedule:
-    - cron:  '0 5-20/4 * * *' # runs 4 hours between 05:00-20:00 UTC
+    - cron:  '0 5-20/3 * * *' # runs every 3 hours between 05:00-20:00 UTC
   workflow_dispatch:
 
 jobs:
