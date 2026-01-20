@@ -14,17 +14,21 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0  # fetch whole history
-    - name: Set up Python 3.10
+        
+    - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: "3.10"
-    - name: Install dependencies
+        python-version-file: ".python-version"
+    
+    - name: Install uv
+      uses: astral-sh/setup-uv@v6
+
+    - name: Install the dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        uv sync --locked --all-extras --dev
         
     - name: Prepare data from git
-      run: python extract_git_history.py -i occupancy.csv -o occupancy_history.csv --start-at be9808b76526d4b8646232e1d63148f10930576b
+      run: uv run python extract_git_history.py -i occupancy.csv -o occupancy_history.csv --start-at be9808b76526d4b8646232e1d63148f10930576b
     
     - name: Upload artifact
       uses: actions/upload-artifact@v4
