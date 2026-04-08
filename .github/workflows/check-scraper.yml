@@ -1,0 +1,61 @@
+name: Check scraper health
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */6 * * *'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+
+    steps:
+      - name: Check out this repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check last update and manage issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_TITLE: "Scraper is not running"
+          ISSUE_LABEL: "bug"
+        run: |
+          # Get the last commit date for occupancy.csv (UTC epoch)
+          last_commit_epoch=$(git log -1 --format="%ct" -- occupancy.csv)
+          if [ -z "$last_commit_epoch" ]; then
+            echo "::error::No commit history found for occupancy.csv"
+            exit 1
+          fi
+          now_epoch=$(date +%s)
+          diff_seconds=$((now_epoch - last_commit_epoch))
+          two_hours=7200
+
+          # Find existing open issue with matching title
+          existing_issue=$(gh issue list --state open --search "in:title ${ISSUE_TITLE}" --json number,title --jq ".[] | select(.title == \"${ISSUE_TITLE}\") | .number" | head -1)
+
+          if [ "$diff_seconds" -gt "$two_hours" ]; then
+            last_commit_time=$(git log -1 --format="%ci" -- occupancy.csv)
+            hours_ago=$(( diff_seconds / 3600 ))
+            message="The file \`occupancy.csv\` has not been updated for ${hours_ago} hours (last update: ${last_commit_time})."
+
+            if [ -n "$existing_issue" ]; then
+              echo "Updating existing issue #${existing_issue}"
+              gh issue comment "$existing_issue" --body "${message}"
+            else
+              echo "Creating new issue"
+              gh issue create \
+                --title "${ISSUE_TITLE}" \
+                --body "${message}" \
+                --label "${ISSUE_LABEL}"
+            fi
+          else
+            echo "occupancy.csv is up to date."
+            if [ -n "$existing_issue" ]; then
+              echo "Closing resolved issue #${existing_issue}"
+              gh issue close "$existing_issue" --comment "The scraper is running again. The file \`occupancy.csv\` has been updated."
+            fi
+          fi
