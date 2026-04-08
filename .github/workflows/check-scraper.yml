@@ -3,7 +3,7 @@ name: Check scraper health
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 */6 * * *'
+    - cron: '0 7,13,19 * * *'
 
 jobs:
   check:
@@ -15,47 +15,52 @@ jobs:
     steps:
       - name: Check out this repo
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Check last update and manage issue
+      - name: Check each gym's timestamp and manage issue
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_TITLE: "Scraper is not running"
           ISSUE_LABEL: "bug"
         run: |
-          # Get the last commit date for occupancy.csv (UTC epoch)
-          last_commit_epoch=$(git log -1 --format="%ct" -- occupancy.csv)
-          if [ -z "$last_commit_epoch" ]; then
-            echo "::error::No commit history found for occupancy.csv"
-            exit 1
-          fi
           now_epoch=$(date +%s)
-          diff_seconds=$((now_epoch - last_commit_epoch))
           two_hours=7200
+          stale_gyms=""
+
+          # Parse CSV: extract timestamp (field 1) and gym name (field 4)
+          while IFS=$'\t' read -r timestamp gym_name; do
+            row_epoch=$(date -d "$timestamp" +%s 2>/dev/null)
+            if [ -z "$row_epoch" ]; then
+              echo "::warning::Could not parse timestamp '${timestamp}' for gym '${gym_name}'"
+              continue
+            fi
+
+            diff_seconds=$((now_epoch - row_epoch))
+            if [ "$diff_seconds" -gt "$two_hours" ]; then
+              hours_ago=$(( diff_seconds / 3600 ))
+              stale_gyms="${stale_gyms}- **${gym_name}**: last update ${timestamp} (${hours_ago}h ago)\n"
+            fi
+          done < <(awk -F',' 'NR > 1 { gsub(/"/, "", $1); gsub(/"/, "", $4); printf "%s\t%s\n", $1, $4 }' occupancy.csv)
 
           # Find existing open issue with matching title
           existing_issue=$(gh issue list --state open --search "in:title ${ISSUE_TITLE}" --json number,title --jq ".[] | select(.title == \"${ISSUE_TITLE}\") | .number" | head -1)
 
-          if [ "$diff_seconds" -gt "$two_hours" ]; then
-            last_commit_time=$(git log -1 --format="%ci" -- occupancy.csv)
-            hours_ago=$(( diff_seconds / 3600 ))
-            message="The file \`occupancy.csv\` has not been updated for ${hours_ago} hours (last update: ${last_commit_time})."
+          if [ -n "$stale_gyms" ]; then
+            message="The following gyms have stale data (not updated in the last 2 hours):\n\n${stale_gyms}"
 
             if [ -n "$existing_issue" ]; then
               echo "Updating existing issue #${existing_issue}"
-              gh issue comment "$existing_issue" --body "${message}"
+              printf "%b" "$message" | gh issue comment "$existing_issue" --body-file -
             else
               echo "Creating new issue"
-              gh issue create \
+              printf "%b" "$message" | gh issue create \
                 --title "${ISSUE_TITLE}" \
-                --body "${message}" \
+                --body-file - \
                 --label "${ISSUE_LABEL}"
             fi
           else
-            echo "occupancy.csv is up to date."
+            echo "All gyms in occupancy.csv are up to date."
             if [ -n "$existing_issue" ]; then
               echo "Closing resolved issue #${existing_issue}"
-              gh issue close "$existing_issue" --comment "The scraper is running again. The file \`occupancy.csv\` has been updated."
+              gh issue close "$existing_issue" --comment "The scraper is running again. All gyms in \`occupancy.csv\` are up to date."
             fi
           fi
