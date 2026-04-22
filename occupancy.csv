@@ -1,17 +1,17 @@
 "timestamp_utc","url","training_area_m2","gym","occupancy"
-"2026-04-22T16:33:08.980399","https://www.fitnesspark.ch/fitnessparks/zuerich-stadelhofen/ueber-den-park/","600","Fitnesspark Zürich Stadelhofen","171"
-"2026-04-22T16:35:16.532722","https://www.fitnesspark.ch/fitnessparks/zug-eichstaette/ueber-den-park/","1341","Fitnesspark Zug Eichstätte","152"
-"2026-04-22T16:37:16.789215","https://www.fitnesspark.ch/fitnessparks/greifensee-milandia/ueber-den-park/","734","Fitnesspark Greifensee Milandia","61"
-"2026-04-22T16:39:17.034481","https://www.fitnesspark.ch/fitnessparks/regensdorf/ueber-den-park/","553","Fitnesspark Regensdorf","133"
-"2026-04-22T16:41:27.354130","https://www.fitnesspark.ch/fitnessparks/winterthur/ueber-den-park/","1200","Fitnesspark Winterthur","143"
-"2026-04-22T16:43:27.642647","https://www.fitnesspark.ch/fitnessparks/zuerich-glattpark/ueber-den-park/","930","Fitnesspark Zürich Glattpark","174"
-"2026-04-22T16:45:27.969617","https://www.fitnesspark.ch/fitnessparks/puls-5-zuerich/ueber-den-park/","850","Fitnesspark Zürich Puls 5","142"
-"2026-04-22T16:47:28.295683","https://www.fitnesspark.ch/fitnessparks/zuerich-sihlcity/ueber-den-park/","714","Fitnesspark Zürich Sihlcity","85"
-"2026-04-22T16:49:28.640546","https://www.fitnesspark.ch/fitnessparks/zuerich-stockerhof/ueber-den-park/","708","Fitnesspark Zürich Stockerhof","177"
-"2026-04-22T16:51:39.152224","https://www.fitnesspark.ch/fitnessparks/luzern-national/ueber-den-park/","863","Fitnesspark Luzern National","167"
-"2026-04-22T16:53:39.484797","https://www.fitnesspark.ch/fitnessparks/luzern-allmend/ueber-den-park/","1091","Fitnesspark Luzern Allmend","112"
-"2026-04-22T16:55:39.794991","https://www.fitnesspark.ch/fitnessparks/baden-trafo/ueber-den-park/","590","Fitnesspark Baden Trafo","85"
-"2026-04-22T16:57:40.109896","https://www.fitnesspark.ch/fitnessparks/basel-heuwaage/ueber-den-park/","","Fitnesspark Basel Heuwaage","170"
-"2026-04-22T16:59:40.401917","https://www.fitnesspark.ch/fitnessparks/bern-city/ueber-den-park/","1200","Fitnesspark Bern City","124"
-"2026-04-22T17:02:00.777606","https://www.fitnesspark.ch/fitnessparks/oberhofen-bern/ueber-den-park/","311","Fitnesspark Oberhofen","63"
-"2026-04-22T17:04:01.091780","https://www.fitnesspark.ch/fitnessparks/ostermundigen-time-out/ueber-den-park/","642","Fitnesspark Ostermundigen Time-Out","115"
+"2026-04-22T17:08:30.514464","https://www.fitnesspark.ch/fitnessparks/zuerich-stadelhofen/ueber-den-park/",600,"Fitnesspark Zürich Stadelhofen",175
+"2026-04-22T17:08:51.587589","https://www.fitnesspark.ch/fitnessparks/zug-eichstaette/ueber-den-park/",1341,"Fitnesspark Zug Eichstätte",214
+"2026-04-22T17:08:58.617244","https://www.fitnesspark.ch/fitnessparks/greifensee-milandia/ueber-den-park/",734,"Fitnesspark Greifensee Milandia",103
+"2026-04-22T17:09:05.550275","https://www.fitnesspark.ch/fitnessparks/regensdorf/ueber-den-park/",553,"Fitnesspark Regensdorf",156
+"2026-04-22T17:09:12.855375","https://www.fitnesspark.ch/fitnessparks/winterthur/ueber-den-park/",1200,"Fitnesspark Winterthur",199
+"2026-04-22T17:09:19.738396","https://www.fitnesspark.ch/fitnessparks/zuerich-glattpark/ueber-den-park/",930,"Fitnesspark Zürich Glattpark",238
+"2026-04-22T17:09:26.626258","https://www.fitnesspark.ch/fitnessparks/puls-5-zuerich/ueber-den-park/",850,"Fitnesspark Zürich Puls 5",175
+"2026-04-22T17:09:33.557790","https://www.fitnesspark.ch/fitnessparks/zuerich-sihlcity/ueber-den-park/",714,"Fitnesspark Zürich Sihlcity",137
+"2026-04-22T17:09:40.567134","https://www.fitnesspark.ch/fitnessparks/zuerich-stockerhof/ueber-den-park/",708,"Fitnesspark Zürich Stockerhof",206
+"2026-04-22T17:09:47.503936","https://www.fitnesspark.ch/fitnessparks/luzern-national/ueber-den-park/",863,"Fitnesspark Luzern National",213
+"2026-04-22T17:09:54.712572","https://www.fitnesspark.ch/fitnessparks/luzern-allmend/ueber-den-park/",1091,"Fitnesspark Luzern Allmend",149
+"2026-04-22T17:10:01.580756","https://www.fitnesspark.ch/fitnessparks/baden-trafo/ueber-den-park/",590,"Fitnesspark Baden Trafo",103
+"2026-04-22T17:10:09.119245","https://www.fitnesspark.ch/fitnessparks/basel-heuwaage/ueber-den-park/","","Fitnesspark Basel Heuwaage",216
+"2026-04-22T17:10:15.897376","https://www.fitnesspark.ch/fitnessparks/bern-city/ueber-den-park/",1200,"Fitnesspark Bern City",190
+"2026-04-22T17:10:23.171390","https://www.fitnesspark.ch/fitnessparks/oberhofen-bern/ueber-den-park/",311,"Fitnesspark Oberhofen",76
+"2026-04-22T17:10:30.091094","https://www.fitnesspark.ch/fitnessparks/ostermundigen-time-out/ueber-den-park/",642,"Fitnesspark Ostermundigen Time-Out",150
